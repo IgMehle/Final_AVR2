@@ -88,7 +88,7 @@ void automatico()
 	{
 		off_INT4;
 		off_INT5;
-		//enable_int_uart1_RX;
+		off_int_uart1_RX;
 		flag_auto=0;
 	}
 
