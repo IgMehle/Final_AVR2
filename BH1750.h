@@ -17,7 +17,7 @@
 void iniciar_sensor();
 void config_HRcont();
 unsigned int leer_valor_lux();
-unsigned int lux_conv(unsigned int lux);
+unsigned int lux_conv(unsigned int);
 
 
 #endif /* BH1750_H_ */

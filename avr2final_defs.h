@@ -82,20 +82,20 @@ void UART1_init(unsigned int ubrr);
 #define FACTOR 65,535
 
 extern volatile bit_t flags;
-#define flag_man	flags.B0
-#define flag_auto	flags.B1
+#define modo		flags.B0
+#define estado		flags.B1
 #define flag_lux	flags.B2
-#define flag_bot	flags.B3
+#define flag_config	flags.B3
 #define flag_modo	flags.B4
 #define flag_est	flags.B5
 #define flag_bri	flags.B6
-#define flag_s		flags.B7
+#define flag_show	flags.B7
 
 void automatico(void);
 void manual(void);
-void show_LCD(char modo, char estado[4], char brillo, unsigned int lux);
-void show_UART1_modo(char modo);
-void show_UART1_estado(char estado[4], char brillo);
-void show_UART1_lux(unsigned int lux);
+void show_LCD(void);
+void show_UART1_modo(void);
+void show_UART1_estado(void);
+void show_UART1_lux(void);
 
 #endif /* AVR2FINAL_DEFS_H_ */

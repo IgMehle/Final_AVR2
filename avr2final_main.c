@@ -8,8 +8,6 @@
 volatile int cont=0;
 volatile bit_t flags;
 
-volatile char modo='A';
-volatile char estado[]="ON:";
 volatile char brillo=50;
 volatile char aux_bri[4];
 volatile unsigned int lux=0;
@@ -25,7 +23,7 @@ ISR(TIMER2_COMP_vect)
 	*/
 	if(cont==1500)	//Cada 300ms
 	{
-		flag_lux=1;		//Permite actualizar valor lux
+		flag_lux=1;		//Permite actualizar valor lux y mostrar en lcd
 		cont=0;
 	}
 }
@@ -36,9 +34,9 @@ ISR(INT4_vect)
 {
 	if(Get_PINE4)
 	{
-		if(brillo>10)
+		if(brillo>19)
 		{
-			brillo--;
+			brillo-=10;
 			timer0_comp_value=(char)((brillo*2,55)-2);		//actualizo pwm
 		}
 	}
@@ -50,9 +48,9 @@ ISR(INT5_vect)
 {
 	if(Get_PINE5)
 	{
-		if(brillo<100)
+		if(brillo<90)
 		{
-			brillo++;
+			brillo+=10;
 			timer0_comp_value=(char)((brillo*2,55)-2);		//actualizo pwm
 		}
 	}
@@ -65,17 +63,16 @@ ISR(USART1_RX_vect)
 	switch(UART1_REG)
 	{
 		case 'A':
-			flag_modo=1;
-			if(modo=='A') modo='M';
-			else modo='A';
+			if(modo) modo=0;
+			else modo=1;
 			break;
 
 		case 'L':
-			if(modo=='M') flag_est=1;	//solo modo manual
+			if(!modo) flag_est=1;	//solo modo manual
 			break;
 
 		case 'B':
-			if(modo=='M')	//solo modo manual
+			if(!modo)	//solo modo manual
 			{
 				flag_bri=1;
 				off_int_uart1_RX;	//BLOQUEO INT RX
@@ -83,7 +80,7 @@ ISR(USART1_RX_vect)
 			break;
 
 		case 'S':
-			flag_s=1;
+			flag_show=1;
 			break;
 
 		default:
@@ -100,14 +97,14 @@ int main()
 	PinE5_Input;			//BOTON INCREMENTAR BRILLO
 
 	//flag_lcd=1;
-	flag_man=0;
-	flag_auto=1;			//arranca en automático
-	flag_lux=0;				//luxometro en 0
-	flag_bot=0;
+	modo=0;
+	estado=1;
+	flag_lux=0;
+	flag_config=1;
 	flag_modo=0;
 	flag_est=0;
 	flag_bri=0;
-	flag_s=0;
+	flag_show=0;
 
 	lcd_init(LCD_DISP_ON);		//inicializo el display lcd
 	twi_init();					//inicializo el puerto i2c
@@ -136,10 +133,10 @@ int main()
 	{
 		switch(modo)
 		{
-			case 'A':
+			case 1:
 				automatico();
 				break;
-			case 'M':
+			case 0:
 				manual();
 				break;
 			default:

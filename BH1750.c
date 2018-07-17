@@ -31,8 +31,8 @@ unsigned int leer_valor_lux()
 	return bytes;
 }
 
-unsigned int lux_conv(unsigned int lux)
+unsigned int lux_conv(unsigned int lx)
 {
-	lux=(int)lux/1.2;
-	return lux;
+	lx=(unsigned int)lx/1.2;
+	return lx;
 }
