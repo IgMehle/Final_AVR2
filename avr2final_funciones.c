@@ -73,7 +73,7 @@ void manual()
 		flag_lux=0;
 	}
 
-	if(modo=='A') flag_config=1;
+	if(modo) flag_config=1;
 }
 
 void automatico()
@@ -118,7 +118,7 @@ void automatico()
 		flag_lux=0;
 	}
 
-	if(modo=='M') flag_config=1;
+	if(!modo) flag_config=1;
 }
 
 void show_LCD()
